@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: sante_postgres
+    environment:
+      POSTGRES_USER: data_eng
+      POSTGRES_PASSWORD: data_eng
+      POSTGRES_DB: sante
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U data_eng -d sante"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  pgdata:
