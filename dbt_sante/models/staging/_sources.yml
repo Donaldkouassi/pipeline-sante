@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Zone d'atterrissage — copie fidèle de la source, non transformée."
+    schema: raw
+    tables:
+      - name: covid_landing
+        description: "Une ligne = une ligne de CSV source, stockée en JSONB."
+        columns:
+          - name: date_ingestion
+            description: "Date du lot d'ingestion. Clé de partition."
+          - name: charge_utile
+            description: "La ligne CSV complète, en JSONB."

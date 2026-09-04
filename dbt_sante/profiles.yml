@@ -1,0 +1,12 @@
+sante:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host:     "{{ env_var('PGHOST',     '127.0.0.1') }}"
+      port:     "{{ env_var('PGPORT',     '5434') | int }}"
+      user:     "{{ env_var('PGUSER',     'data_eng') }}"
+      password: "{{ env_var('PGPASSWORD', 'data_eng') }}"
+      dbname:   "{{ env_var('PGDATABASE', 'sante') }}"
+      schema:   marts
+      threads:  4

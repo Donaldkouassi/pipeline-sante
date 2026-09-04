@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: dim_pays
+    description: "Dimension pays, avec clé de substitution générée."
+    columns:
+      - name: id_pays
+        description: "Clé de substitution. Stable même si la source renomme le pays."
+        data_tests: [unique, not_null]
+      - name: nom_pays
+        description: "Nom du pays tel que publié par la source."
+        data_tests: [unique, not_null]
+
+  - name: dim_date
+    description: "Calendrier couvrant la période réelle des données."
+    columns:
+      - name: date_jour
+        data_tests: [unique, not_null]
+
+  - name: fait_covid_journalier
+    description: >
+      Table de faits au grain pays x territoire x jour. Contient l'incrément
+      quotidien (additif) et le cumul source (semi-additif, à ne jamais sommer
+      dans le temps).
+    columns:
+      - name: id_pays
+        description: "Référence vers dim_pays."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_pays')
+                field: id_pays
+      - name: date_jour
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_jour
+      - name: cas_jour
+        description: "Nouveaux cas du jour. Mesure ADDITIVE."
+      - name: cas_cumules
+        description: >
+          Cumul depuis le début. Mesure SEMI-ADDITIVE : sommable entre
+          territoires à une date donnée, jamais entre deux dates.
+
+  - name: vue_covid_pays_mois
+    description: "Agrégation mensuelle par pays, matérialisée en vue."

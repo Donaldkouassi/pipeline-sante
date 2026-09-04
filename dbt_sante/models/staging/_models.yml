@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: stg_covid
+    description: >
+      Séries dépivotées et typées, avec l'incrément quotidien calculé à partir
+      du cumul source. Une ligne par pays, territoire, date et métrique.
+    columns:
+      - name: pays_source
+        description: "Nom du pays tel que publié par la source."
+        data_tests: [not_null]
+      - name: date_observation
+        description: "Date de l'observation."
+        data_tests: [not_null]
+      - name: metrique
+        description: "confirmed, deaths ou recovered."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['confirmed', 'deaths', 'recovered']
